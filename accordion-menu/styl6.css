@@ -1,0 +1,80 @@
+ol,ul {
+	list-style: none;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+.container {
+	width: 950px;
+	margin: 10px auto;
+	font: 14px Arial, Helvetica, sans-serif;
+}
+
+p {
+    margin: 10px;
+}
+
+
+#accordion {
+	width: 225px;
+	margin: 10px 0 10px 10px;
+}
+
+#accordion .accordion-header {
+	background: #3971AC;
+	color: #fff;
+	border-bottom: 1px solid #fff;
+	position: relative;
+}
+
+#accordion .accordion-header h3 {
+	margin: 0;
+	cursor: pointer;
+	text-indent: 10px;
+	padding: 5px 0;
+}
+
+#accordion .header-active {
+	background: #48ABC3;
+}
+
+#accordion .accordion-header span {
+	background: url(../images/strzalka.gif) no-repeat;
+	display: block;
+	position: absolute;
+	width: 11px;
+	height: 12px;
+	top: 5px;
+	left: 200px;
+}
+
+#accordion .accordion-header span.icon-active {
+	background: url(../images/strzalka.gif) no-repeat;
+	background-position: 0 -12px;
+	display: block;
+	position: absolute;
+	width: 11px;
+	height: 12px;
+	top: 5px;
+	left: 200px;
+}
+
+#accordion ul.accordion-content {
+	margin: 0px 0 0px 0;
+	padding: 5px 5px 10px 5px;
+	list-style-type: none;
+	background: #A8D7E2;
+}
+
+#accordion ul.accordion-content li {
+	padding: 1px 0px;
+	display: block;
+	margin: 0;
+	padding: 2px 5px;
+}
+
+#accordion ul.accordion-content li a {
+	color: #03233060;
+}
+

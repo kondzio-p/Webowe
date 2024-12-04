@@ -1,0 +1,67 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h2 class="text-center">Kalkulator BMI</h2>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="calculateBMI()" #bmiForm="ngForm">
+              <div class="mb-3">
+                <label for="weight" class="form-label">Waga (kg)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="weight"
+                  [(ngModel)]="weight"
+                  name="weight"
+                  required
+                  min="1"
+                  max="500"
+                >
+              </div>
+              <div class="mb-3">
+                <label for="height" class="form-label">Wzrost (cm)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="height"
+                  [(ngModel)]="height"
+                  name="height"
+                  required
+                  min="50"
+                  max="250"
+                >
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                [disabled]="!bmiForm.form.valid"
+              >
+                Kalkuluj BMI
+              </button>
+            </form>
+  
+            <div *ngIf="bmi !== null" class="mt-4 text-center">
+              <h3>Wyniki</h3>
+              <p class="h4">
+                BMI: <strong>{{ bmi }}</strong>
+              </p>
+              <p class="h4">
+                Kategoria:
+                <span
+                  [ngClass]="
+                    bmiCategory === 'Niedowaga' || bmiCategory === 'Otyłość' ? 'text-danger' :
+                    bmiCategory === 'Nadwaga' ? 'text-warning' :
+                    'text-success'
+                  "
+                >
+                  {{ bmiCategory }}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

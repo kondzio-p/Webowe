@@ -1,0 +1,27 @@
+<h2>{{title}}</h2>
+
+<div class="kalkulator">
+  <div>
+    <label for="num1">Liczba a: </label>
+    <input type="number" name="num1" id="num1" [(ngModel)]="num1">
+  </div>
+
+  <div>
+    <label for="num2">Liczba b: </label>
+    <input type="number" name="num2" id="num2" [(ngModel)]="num2">
+  </div>
+
+  <button class="btn btn-primary" (click)="calculate()">Licz</button>
+  <div *ngIf="errorMes" class="error">{{errorMes}}</div>
+
+  <div *ngIf="wynik">
+    <p>Suma liczb: {{wynik.suma}}</p>
+    <p>Roznica liczb: {{wynik.roznica}}</p>
+    <p>Iloczyn liczb: {{wynik.iloczyn}}</p>
+    <p>Iloraz liczb: {{wynik.iloraz}}</p>
+
+  </div>
+</div>
+
+<app-bmi></app-bmi>
+<app-pole-objetosc-kola></app-pole-objetosc-kola>

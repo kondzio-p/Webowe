@@ -1,0 +1,12 @@
+/* Additional custom styles for BMI component */
+.card {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  input.ng-invalid.ng-touched {
+    border-color: #dc3545;
+  }
+  
+  input.ng-valid.ng-touched {
+    border-color: #28a745;
+  }

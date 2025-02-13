@@ -1,0 +1,19 @@
+<div class="container">
+  <h1>Kategorie zdjęć</h1>
+  <div class="row">
+    <div *ngFor="let i of category" class="col-auto form-check form-switch">
+      <input class="form-check-input" type="checkbox" name="{{i.cat}}" id="{{i.cat}}"
+      [(ngModel)]="i.checked" (change)="filtruj2()">
+      {{i.cat}}
+    </div>
+  </div>
+    
+  <div class="row">
+    <div class="col-sm-3 m-5" *ngFor="let photo of photos_visible">
+      <img src="{{photo.filename}}" alt="{{photo.alt}}">
+      <h4>Pobrań: {{photo.downloads}}</h4>
+      <button class="btn btn-success" (click)="polub(photo)">Pobierz</button>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-md-4 mb-4" *ngFor="let store of stores; let i = index">
+    <div class="card">
+      <div class="card-header d-flex align-items-center">
+        {{ store.name }}
+        <button class="btn btn-danger btn-sm ms-auto" (click)="removeStore(store.id)">
+          Usuń
+        </button>
+      </div>
+
+      <div class="card-body">
+        <ul class="list-group">
+          <li class="list-group-item d-flex align-items-center" *ngFor="let product of store.products; let i = index" >
+            {{ product }}
+            <button class="btn btn-danger btn-sm ms-auto" (click)="removeProduct(store.id,i)">Remove</button>
+          </li>
+        </ul>
+        <button class="btn btn-primary btn-sm mt-2" (click)="addProduct(store.id)">
+          Add Product
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<button class="btn btn-success mt-3" (click)="addStore()">Add Store</button>

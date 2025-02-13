@@ -1,0 +1,38 @@
+<!-- galeria.component.html -->
+<div class="container mt-5">
+    <div class="mb-3">
+        <label for="fileInput" class="form-label">Dodawanie zdjęć: </label>
+        <input type="file" id="fileInput" name="fileInput" class="form-control" 
+               (change)="onFileSelected($event)" multiple>
+    </div>
+
+    <div class="row" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let image of images; let i = index" 
+             class="col-md-4 mb-4"
+             cdkDrag
+             [cdkDragData]="image">
+            <!-- Preview podczas przeciągania -->
+            <div class="drag-preview" *cdkDragPreview>
+                <div class="card">
+                    <img [src]="image.url" class="card-img-top preview-img" [alt]="image.name">
+                </div>
+            </div>
+            <!-- Placeholder podczas przeciągania -->
+            <div class="drag-placeholder" *cdkDragPlaceholder>
+                <div class="card placeholder-card">
+                    <div class="placeholder-img"></div>
+                </div>
+            </div>
+            <!-- Właściwa karta -->
+            <div class="card image-card">
+                <div class="image-container">
+                    <img [src]="image.url" class="card-img-top" [alt]="image.name">
+                </div>
+                <div class="card-body text-center">
+                    <p class="image-name">{{image.name}}</p>
+                    <button class="btn btn-danger" (click)="removeImage(i)">Usuń</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

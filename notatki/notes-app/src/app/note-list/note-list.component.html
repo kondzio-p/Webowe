@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-4 mb-3" *ngFor="let note of notes">
+    <div class="card">
+      <img
+        *ngIf="note.imagePath"
+        [src]="'http://localhost:3000/' + note.imagePath"
+        class="card-img-top"
+        alt="Zdjęcie notatki"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ note.title }}</h5>
+        <p class="card-text">{{ note.content }}</p>
+        <div class="btn-group">
+          <button class="btn btn-primary btn-sm" (click)="editNote(note)">
+            Edytuj
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteNote(note.id!)">
+            Usuń
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

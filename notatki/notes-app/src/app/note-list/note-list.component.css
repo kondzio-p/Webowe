@@ -1,0 +1,93 @@
+/* Podstawowe style kart */
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    width: 100%;
+    min-height: 400px;
+    max-height: 400px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Nagłówek karty */
+.card-title {
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+}
+
+/* Stała wysokość obrazka */
+.card-img-top {
+    height: 200px;
+    object-fit: scale-down;
+    width: 100%;
+}
+
+/* Przyciski akcji */
+.btn-group {
+    margin-top: auto;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+}
+
+/* Formularze */
+.form-control, .form-control-file {
+    margin-bottom: 15px;
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Tekst notatki */
+.card-text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+/* Ikony */
+.bi {
+    margin-right: 5px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .card {
+        min-height: 350px;
+        max-height: 350px;
+    }
+    
+    .card-img-top {
+        height: 150px;
+    }
+}
+
+/* Data utworzenia */
+.text-muted.small {
+    font-size: 0.85rem;
+    color: #6c757d !important;
+    margin-bottom: 0.5rem;
+}

@@ -1,30 +1,48 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Add this import
+import { CommonModule } from '@angular/common';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NoteService } from '../services/note.service';
 import { Note } from '../models/note.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-note-form',
-  standalone: true, // Add this line
-  imports: [FormsModule], // Add this line
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './note-form.component.html',
-  styleUrl: './note-form.component.css',
+  styleUrls: ['./note-form.component.css']
 })
-export class NoteFormComponent implements OnInit {
+export class NoteFormComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput!: ElementRef;
-
+  
   note: Note = {
     title: '',
     content: '',
   };
   selectedFile: File | null = null;
+  isEditing = false;
+  private editSubscription!: Subscription;
 
   constructor(private noteService: NoteService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.editSubscription = this.noteService.noteToEdit$.subscribe(note => {
+      if (note) {
+        this.isEditing = true;
+        this.note = { ...note };
+      }
+    });
+  }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
+  ngOnDestroy(): void {
+    this.editSubscription.unsubscribe();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
   }
 
   onSubmit(): void {
@@ -36,24 +54,36 @@ export class NoteFormComponent implements OnInit {
       formData.append('image', this.selectedFile, this.selectedFile.name);
     }
 
-    this.noteService.createNote(formData).subscribe(
-      (response) => {
-        this.resetForm();
-        // Wywołaj metodę odświeżającą listę notatek
-        this.noteService.notifyNoteAdded();
-      },
-      (error) => {
-        console.error('Błąd podczas dodawania notatki', error);
-      }
-    );
+    if (this.isEditing && this.note.id) {
+      formData.append('id', this.note.id.toString());
+      this.noteService.updateNote(this.note.id, formData).subscribe({
+        next: () => {
+          this.resetForm();
+          this.noteService.notifyNoteAdded();
+        },
+        error: (err) => console.error('Update error:', err)
+      });
+    } else {
+      this.noteService.createNote(formData).subscribe({
+        next: () => {
+          this.resetForm();
+          this.noteService.notifyNoteAdded();
+        },
+        error: (err) => console.error('Create error:', err)
+      });
+    }
   }
 
   resetForm(): void {
-    this.note.title = '';
-    this.note.content = '';
+    this.note = { title: '', content: '' };
     this.selectedFile = null;
+    this.isEditing = false;
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
+  }
+
+  cancelEdit(): void {
+    this.resetForm();
   }
 }

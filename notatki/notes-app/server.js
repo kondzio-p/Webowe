@@ -66,3 +66,41 @@ app.delete("/api/notes/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// GET single note
+app.get('/api/notes/:id', async (req, res) => {
+  try {
+    const note = await Note.findByPk(req.params.id);
+    if (note) {
+      res.json(note);
+    } else {
+      res.status(404).json({ error: 'Note not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// UPDATE note
+app.put('/api/notes/:id', upload.single('image'), async (req, res) => {
+  try {
+    const noteData = {
+      title: req.body.title,
+      content: req.body.content,
+    };
+
+    if (req.file) {
+      noteData.imagePath = req.file.path;
+    }
+
+    const note = await Note.findByPk(req.params.id);
+    if (note) {
+      await note.update(noteData);
+      res.json(note);
+    } else {
+      res.status(404).json({ error: 'Note not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});

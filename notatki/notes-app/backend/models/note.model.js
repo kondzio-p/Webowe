@@ -12,6 +12,14 @@ const Note = sequelize.define("Note", {
   imagePath: {
     type: DataTypes.STRING,
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+}, {
+  timestamps: true,
+  updatedAt: false,
 });
 
 module.exports = Note;

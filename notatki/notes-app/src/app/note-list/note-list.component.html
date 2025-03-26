@@ -1,22 +1,59 @@
-<div class="row">
-  <div class="col-md-4 mb-3" *ngFor="let note of notes">
-    <div class="card">
-      <img
-        *ngIf="note.imagePath"
-        [src]="'http://localhost:3000/' + note.imagePath"
-        class="card-img-top"
-        alt="Zdjęcie notatki"
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{ note.title }}</h5>
-        <p class="card-text">{{ note.content }}</p>
-        <div class="btn-group">
-          <button class="btn btn-primary btn-sm" (click)="editNote(note)">
-            Edytuj
-          </button>
-          <button class="btn btn-danger btn-sm" (click)="deleteNote(note.id!)">
-            Usuń
-          </button>
+<div class="container-fluid">
+  <!-- Filtrowanie - pełna szerokość -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5>Filtruj notatki</h5>
+          <div class="row align-items-end">
+            <div class="col-md-4">
+              <label for="startDate" class="form-label">Data początkowa:</label>
+              <input type="date" id="startDate" class="form-control" 
+                     (change)="filterByDateRange(startDate.value, endDate.value)" 
+                     #startDate>
+            </div>
+            <div class="col-md-4">
+              <label for="endDate" class="form-label">Data końcowa:</label>
+              <input type="date" id="endDate" class="form-control" 
+                     (change)="filterByDateRange(startDate.value, endDate.value)" 
+                     #endDate>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-outline-secondary w-100" 
+                      (click)="resetFilters()">
+                <i class="bi bi-arrow-counterclockwise"></i> Resetuj filtry
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista notatek - teraz col-md-6 zamiast col-md-4 -->
+  <div class="row">
+    <div class="col-md-6 mb-3" *ngFor="let note of filteredNotes">
+      <div class="card h-100 fixed-size-card">
+        <img *ngIf="note.imagePath"
+             [src]="'http://localhost:3000/' + note.imagePath"
+             class="card-img-top fixed-image-height"
+             alt="Zdjęcie notatki">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ note.title }}</h5>
+          <p class="card-text text-muted small">
+            Utworzono: {{ note.createdAt | date:'medium' }}
+          </p>
+          <div class="card-text flex-grow-1 text-truncate-multiline">
+            {{ note.content }}
+          </div>
+          <div class="btn-group mt-auto">
+            <button class="btn btn-success btn-sm" (click)="editNote(note)">
+              Edytuj
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteNote(note.id!)">
+              Usuń
+            </button>
+          </div>
         </div>
       </div>
     </div>

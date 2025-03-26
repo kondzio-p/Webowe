@@ -2,9 +2,11 @@
   <!-- Filtrowanie - pełna szerokość -->
   <div class="row mb-3">
     <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <h5>Filtruj notatki</h5>
+      <div class="card shadow-sm">
+        <div class="card-body ccc">
+          <h5 class="card-title text-primary">
+            <i class="bi bi-funnel me-2"></i>Filtruj notatki
+          </h5>
           <div class="row align-items-end">
             <div class="col-md-4">
               <label for="startDate" class="form-label">Data początkowa:</label>
@@ -21,7 +23,7 @@
             <div class="col-md-4">
               <button class="btn btn-outline-secondary w-100" 
                       (click)="resetFilters()">
-                <i class="bi bi-arrow-counterclockwise"></i> Resetuj filtry
+                <i class="bi bi-arrow-counterclockwise me-2"></i>Resetuj filtry
               </button>
             </div>
           </div>
@@ -30,28 +32,36 @@
     </div>
   </div>
 
-  <!-- Lista notatek - teraz col-md-6 zamiast col-md-4 -->
-  <div class="row">
-    <div class="col-md-6 mb-3" *ngFor="let note of filteredNotes">
-      <div class="card h-100 fixed-size-card">
+  <!-- Notes list with drag & drop -->
+  <div class="row min-vh-50" cdkDropList cdkDropListOrientation="mixed" (cdkDropListDropped)="onDrop($event)">
+    <div class="col-md-6 mb-3" *ngFor="let note of filteredNotes; let i = index" cdkDrag>
+      <div class="card h-100 shadow-sm border-0 draggable-card">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+          <span class="badge bg-light text-dark">
+            <i class="bi bi-calendar me-1"></i>
+            {{ note.createdAt | date:'shortDate' }}
+          </span>
+          <span cdkDragHandle class="drag-handle text-muted">
+            <i class="bi bi-grip-vertical"></i>
+          </span>
+        </div>
+        
         <img *ngIf="note.imagePath"
              [src]="'http://localhost:3000/' + note.imagePath"
              class="card-img-top fixed-image-height"
              alt="Zdjęcie notatki">
+             
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title">{{ note.title }}</h5>
-          <p class="card-text text-muted small">
-            Utworzono: {{ note.createdAt | date:'medium' }}
-          </p>
-          <div class="card-text flex-grow-1 text-truncate-multiline">
+          <h5 class="card-title text-truncate">{{ note.title }}</h5>
+          <div class="card-text flex-grow-1 text-truncate-multiline mb-3">
             {{ note.content }}
           </div>
           <div class="btn-group mt-auto">
-            <button class="btn btn-success btn-sm" (click)="editNote(note)">
-              Edytuj
+            <button class="btn btn-outline-success btn-sm" (click)="editNote(note)">
+              <i class="bi bi-pencil-square me-1"></i>Edytuj
             </button>
-            <button class="btn btn-danger btn-sm" (click)="deleteNote(note.id!)">
-              Usuń
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteNote(note.id!)">
+              <i class="bi bi-trash me-1"></i>Usuń
             </button>
           </div>
         </div>

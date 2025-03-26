@@ -35,6 +35,14 @@ export class NoteService {
     return this.http.put<Note>(`${this.apiUrl}/${id}`, noteData);
   }
 
+  updateNoteOrder(notes: Note[]): Observable<any> {
+    const updates = notes.map((note, index) => ({
+      id: note.id,
+      order: index
+    }));
+    return this.http.put(`${this.apiUrl}/update-order`, updates);
+  }
+
   deleteNote(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

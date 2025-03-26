@@ -3,11 +3,13 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NoteService } from '../services/note.service';
 import { Note } from '../models/note.model';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-note-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DragDropModule, HttpClientModule],
   templateUrl: './note-list.component.html',
   styleUrls: ['./note-list.component.css']
 })
@@ -28,10 +30,27 @@ export class NoteListComponent implements OnInit {
   loadNotes(): void {
     this.noteService.getNotes().subscribe({
       next: (notes) => {
-        this.notes = notes;
-        this.filteredNotes = [...notes];
+        this.notes = notes.sort((a, b) => (a.order || 0) - (b.order || 0));
+        this.filteredNotes = [...this.notes];
       },
       error: (err) => console.error('Błąd ładowania notatek', err)
+    });
+  }
+
+  onDrop(event: CdkDragDrop<Note[]>) {
+    moveItemInArray(this.filteredNotes, event.previousIndex, event.currentIndex);
+    
+    // Update order based on new position
+    this.filteredNotes.forEach((note, index) => {
+      note.order = index;
+    });
+
+    // Send update to backend
+    this.noteService.updateNoteOrder(this.filteredNotes).subscribe({
+      next: () => {
+        console.log('Kolejność zaktualizowana');
+      },
+      error: (err) => console.error('Błąd aktualizacji kolejności', err)
     });
   }
 

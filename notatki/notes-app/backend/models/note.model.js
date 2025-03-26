@@ -17,6 +17,11 @@ const Note = sequelize.define("Note", {
     allowNull: false,
     defaultValue: DataTypes.NOW,
   },
+  order: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
 }, {
   timestamps: true,
   updatedAt: false,

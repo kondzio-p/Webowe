@@ -4,4 +4,5 @@ export interface Note {
   content: string;
   imagePath?: string;
   createdAt?: Date;
+  order?: number;
 }

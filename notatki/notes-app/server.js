@@ -23,6 +23,19 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
 
+// Order update endpoint
+app.put('/api/notes/update-order', async (req, res) => {
+  try {
+    const updates = req.body;
+    for (const update of updates) {
+      await Note.update({ order: update.order }, { where: { id: update.id } });
+    }
+    res.json({ message: 'Order updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // CRUD routes here (możemy dodać później)
 
 sequelize.sync().then(() => {

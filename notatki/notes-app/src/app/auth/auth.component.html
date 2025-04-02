@@ -1,0 +1,42 @@
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">{{isLogin ? 'Logowanie' : 'Rejestracja'}}</h4>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label for="username" class="form-label">Nazwa użytkownika</label>
+                <input type="text" class="form-control" id="username" name="username" 
+                       [(ngModel)]="username" required>
+              </div>
+              
+              <div class="mb-3">
+                <label for="password" class="form-label">Hasło</label>
+                <input type="password" class="form-control" id="password" name="password" 
+                       [(ngModel)]="password" required>
+              </div>
+              
+              <div class="alert alert-danger" *ngIf="errorMessage">
+                {{errorMessage}}
+              </div>
+              
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                  {{isLogin ? 'Zaloguj się' : 'Zarejestruj się'}}
+                </button>
+                
+                <div class="text-center mt-3">
+                  <a href="javascript:void(0)" (click)="toggleAuthMode()">
+                    {{isLogin ? 'Nie masz konta? Zarejestruj się' : 'Masz już konto? Zaloguj się'}}
+                  </a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

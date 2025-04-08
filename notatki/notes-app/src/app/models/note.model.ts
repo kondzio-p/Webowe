@@ -5,4 +5,5 @@ export interface Note {
   imagePath?: string;
   createdAt?: Date;
   order?: number;
+  sensitive?: boolean;
 }

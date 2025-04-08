@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NoteService } from '../services/note.service';
 import { Note } from '../models/note.model';
@@ -10,14 +16,15 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './note-form.component.html',
-  styleUrls: ['./note-form.component.css']
+  styleUrls: ['./note-form.component.css'],
 })
 export class NoteFormComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput!: ElementRef;
-  
+
   note: Note = {
     title: '',
     content: '',
+    sensitive: false,
   };
   selectedFile: File | null = null;
   isEditing = false;
@@ -26,7 +33,7 @@ export class NoteFormComponent implements OnInit, OnDestroy {
   constructor(private noteService: NoteService) {}
 
   ngOnInit(): void {
-    this.editSubscription = this.noteService.noteToEdit$.subscribe(note => {
+    this.editSubscription = this.noteService.noteToEdit$.subscribe((note) => {
       if (note) {
         this.isEditing = true;
         this.note = { ...note };
@@ -49,6 +56,7 @@ export class NoteFormComponent implements OnInit, OnDestroy {
     const formData = new FormData();
     formData.append('title', this.note.title);
     formData.append('content', this.note.content);
+    formData.append('sensitive', this.note.sensitive ? 'true' : 'false');
 
     if (this.selectedFile) {
       formData.append('image', this.selectedFile, this.selectedFile.name);
@@ -61,7 +69,7 @@ export class NoteFormComponent implements OnInit, OnDestroy {
           this.resetForm();
           this.noteService.notifyNoteAdded();
         },
-        error: (err) => console.error('Update error:', err)
+        error: (err) => console.error('Update error:', err),
       });
     } else {
       this.noteService.createNote(formData).subscribe({
@@ -69,13 +77,13 @@ export class NoteFormComponent implements OnInit, OnDestroy {
           this.resetForm();
           this.noteService.notifyNoteAdded();
         },
-        error: (err) => console.error('Create error:', err)
+        error: (err) => console.error('Create error:', err),
       });
     }
   }
 
   resetForm(): void {
-    this.note = { title: '', content: '' };
+    this.note = { title: '', content: '', sensitive: false };
     this.selectedFile = null;
     this.isEditing = false;
     if (this.fileInput) {

@@ -1,23 +1,30 @@
 .profile-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-  }
-  
-  .profile-image-placeholder {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #e9ecef;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: 1px dashed #6c757d;
-  }
-  
-  .profile-image-placeholder i {
-    font-size: 1.5rem;
-    color: #6c757d;
-  }
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-image:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+}
+
+.profile-image-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.profile-image-placeholder:hover {
+  background-color: #dee2e6;
+}

@@ -1,27 +1,41 @@
 <div class="container-fluid bg-light py-2 mb-4 shadow-sm">
-    <div class="row align-items-center">
-      <div class="col-auto">
-        <h4 class="mb-0">Aplikacja Notatek</h4>
+  <div class="row align-items-center">
+    <div class="col-auto">
+      <h4 class="mb-0">Aplikacja Notatek</h4>
+    </div>
+
+    <div class="col d-flex align-items-center justify-content-end" *ngIf="user">
+      <div class="me-3">
+        <span
+          >Zalogowany: <strong>{{ user.username }}</strong></span
+        >
       </div>
-      
-      <div class="col d-flex align-items-center justify-content-end" *ngIf="user">
-        <div class="me-3">
-          <span>Zalogowany: <strong>{{ user.username }}</strong></span>
-        </div>
-        
-        <div class="me-3 position-relative">
-          <div *ngIf="user.profileImage" class="profile-image">
-            <img [src]="'http://localhost:3000/' + user.profileImage" alt="Profil" class="img-fluid rounded-circle" width="40" height="40">
-          </div>
-          <div *ngIf="!user.profileImage" class="profile-image-placeholder" (click)="fileInput.click()">
+
+      <div class="me-3 position-relative">
+        <div class="profile-image" (click)="fileInput.click()">
+          <img
+            *ngIf="user.profileImage"
+            [src]="'http://localhost:3000/' + user.profileImage"
+            alt="Profil"
+            class="img-fluid rounded-circle"
+            width="40"
+            height="40"
+          />
+          <div *ngIf="!user.profileImage" class="profile-image-placeholder">
             <i class="bi bi-plus"></i>
           </div>
-          <input type="file" #fileInput hidden (change)="onFileSelected($event)">
         </div>
-        
-        <button class="btn btn-outline-danger" (click)="logout()">
-          <i class="bi bi-box-arrow-right me-1"></i>Wyloguj
-        </button>
+        <input
+          type="file"
+          #fileInput
+          hidden
+          (change)="onFileSelected($event)"
+        />
       </div>
+
+      <button class="btn btn-outline-danger" (click)="logout()">
+        <i class="bi bi-box-arrow-right me-1"></i>Wyloguj
+      </button>
     </div>
   </div>
+</div>

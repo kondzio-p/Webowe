@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database");
 
+// Model notatki
 const Note = sequelize.define(
   "Note",
   {

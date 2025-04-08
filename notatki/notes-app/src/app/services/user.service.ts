@@ -15,7 +15,7 @@ interface AuthResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private apiUrl = 'http://localhost:3000/api/users';
@@ -28,7 +28,8 @@ export class UserService {
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    
+
+    // Ładowanie użytkownika z localStorage przy starcie
     if (this.isBrowser) {
       const storedUser = localStorage.getItem('currentUser');
       if (storedUser) {
@@ -37,10 +38,12 @@ export class UserService {
     }
   }
 
+  // Rejestracja nowego użytkownika
   register(username: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { username, password })
+    return this.http
+      .post<AuthResponse>(`${this.apiUrl}/register`, { username, password })
       .pipe(
-        tap(response => {
+        tap((response) => {
           if (this.isBrowser) {
             localStorage.setItem('token', response.token);
             localStorage.setItem('currentUser', JSON.stringify(response.user));
@@ -50,10 +53,12 @@ export class UserService {
       );
   }
 
+  // Logowanie użytkownika
   login(username: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { username, password })
+    return this.http
+      .post<AuthResponse>(`${this.apiUrl}/login`, { username, password })
       .pipe(
-        tap(response => {
+        tap((response) => {
           if (this.isBrowser) {
             localStorage.setItem('token', response.token);
             localStorage.setItem('currentUser', JSON.stringify(response.user));
@@ -63,6 +68,7 @@ export class UserService {
       );
   }
 
+  // Wylogowanie użytkownika
   logout(): void {
     if (this.isBrowser) {
       localStorage.removeItem('token');
@@ -71,20 +77,23 @@ export class UserService {
     this.currentUserSubject.next(null);
   }
 
+  // Aktualizacja zdjęcia profilowego
   updateProfileImage(formData: FormData): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/profile-image`, formData)
-      .pipe(
-        tap(user => {
-          const currentUser = this.currentUserSubject.value;
-          if (currentUser) {
-            const updatedUser = {...currentUser, profileImage: user.profileImage};
-            if (this.isBrowser) {
-              localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-            }
-            this.currentUserSubject.next(updatedUser);
+    return this.http.post<User>(`${this.apiUrl}/profile-image`, formData).pipe(
+      tap((user) => {
+        const currentUser = this.currentUserSubject.value;
+        if (currentUser) {
+          const updatedUser = {
+            ...currentUser,
+            profileImage: user.profileImage,
+          };
+          if (this.isBrowser) {
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
           }
-        })
-      );
+          this.currentUserSubject.next(updatedUser);
+        }
+      })
+    );
   }
 
   get currentUser(): User | null {

@@ -1,0 +1,62 @@
+<div class="form-container">
+    <h2>{{ editMode ? 'Edytuj listę zakupów' : 'Dodaj nową listę zakupów' }}</h2>
+    
+    <form [formGroup]="listForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Nazwa listy</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="getName()?.invalid">Nazwa jest wymagana</mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Sklep</mat-label>
+          <input matInput formControlName="store" required>
+          <mat-error *ngIf="getStore()?.invalid">Sklep jest wymagany</mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Data zakupów</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="getDate()?.invalid">Data jest wymagana</mat-error>
+        </mat-form-field>
+      </div>
+      
+      <h3>Produkty</h3>
+      
+      <div class="add-item-container">
+        <mat-form-field appearance="fill" class="item-input">
+          <mat-label>Nowy produkt</mat-label>
+          <input matInput [(ngModel)]="newItemName" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <button type="button" mat-raised-button color="primary" (click)="addItem()">Dodaj produkt</button>
+      </div>
+      
+      <div formArrayName="items" class="items-list">
+        <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
+          <mat-checkbox formControlName="purchased" (click)="togglePurchased(i)"></mat-checkbox>
+          <span [class.purchased]="getItemPurchased(i)">{{ getItemName(i) }}</span>
+          <button type="button" mat-icon-button color="warn" (click)="removeItem(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        
+        <div *ngIf="items.length === 0" class="empty-items">
+          Brak produktów na liście. Dodaj nowy produkt powyżej.
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" mat-raised-button color="primary" [disabled]="listForm.invalid">
+          {{ editMode ? 'Zapisz zmiany' : 'Dodaj listę' }}
+        </button>
+        <button type="button" mat-button (click)="cancel()">Anuluj</button>
+      </div>
+    </form>
+  </div>

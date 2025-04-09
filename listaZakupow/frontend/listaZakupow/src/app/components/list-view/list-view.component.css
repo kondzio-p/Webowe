@@ -1,0 +1,44 @@
+.filter-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  
+  .add-button-container {
+    margin-bottom: 20px;
+  }
+  
+  .lists-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .list-card {
+    margin-bottom: 20px;
+  }
+  
+  .item-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .purchased {
+    text-decoration: line-through;
+    color: #888;
+  }
+  
+  .item-row {
+    height: auto !important;
+    margin-bottom: 8px;
+  }
+  
+  .empty-message {
+    text-align: center;
+    margin-top: 30px;
+    color: #888;
+    grid-column: 1 / -1;
+  }

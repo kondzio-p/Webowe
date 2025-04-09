@@ -1,0 +1,63 @@
+<div class="filter-container">
+    <mat-form-field>
+      <mat-label>Filtruj według sklepu</mat-label>
+      <mat-select [(ngModel)]="storeFilter" (selectionChange)="applyFilters()">
+        <mat-option value="">Wszystkie sklepy</mat-option>
+        <mat-option *ngFor="let store of stores" [value]="store">{{ store }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+ 
+    <mat-form-field>
+      <mat-label>Sortuj według</mat-label>
+      <mat-select [(ngModel)]="sortBy" (selectionChange)="applyFilters()">
+        <mat-option value="date">Data</mat-option>
+        <mat-option value="store">Sklep</mat-option>
+      </mat-select>
+    </mat-form-field>
+ 
+    <button mat-button (click)="toggleSortDirection()">
+      {{ sortDirection === 'asc' ? '↑' : '↓' }}
+    </button>
+  </div>
+ 
+  <div class="add-button-container">
+    <button mat-raised-button color="primary" (click)="addNewList()">Dodaj nową listę zakupów</button>
+  </div>
+ 
+  <div class="lists-container">
+    <mat-card *ngFor="let list of filteredLists" class="list-card">
+      <mat-card-header>
+        <mat-card-title>{{ list.name }}</mat-card-title>
+        <mat-card-subtitle>
+          Sklep: {{ list.store }} | Data: {{ list.date | date:'dd.MM.yyyy' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+     
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let item of list.items" class="item-row">
+            <div class="item-container">
+              <mat-checkbox
+                [checked]="item.purchased"
+                (change)="toggleItemStatus(list._id, item._id, item.purchased)"
+              >
+                <span [class.purchased]="item.purchased">{{ item.name }}</span>
+              </mat-checkbox>
+              <button mat-icon-button color="warn" (click)="deleteItem(list._id, item._id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+     
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="editList(list._id)">Edytuj</button>
+        <button mat-button color="warn" (click)="deleteList(list._id)">Usuń</button>
+      </mat-card-actions>
+    </mat-card>
+   
+    <div *ngIf="filteredLists.length === 0" class="empty-message">
+      Brak list zakupów do wyświetlenia.
+    </div>
+  </div>

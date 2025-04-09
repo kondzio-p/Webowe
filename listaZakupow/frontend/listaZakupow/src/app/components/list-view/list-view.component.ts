@@ -2,31 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-
 import { ShoppingList, ShoppingListService } from '../../services/shopping-list.service';
-
 @Component({
   selector: 'app-list-view',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatInputModule
+    FormsModule
   ],
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.css']
@@ -90,7 +72,6 @@ export class ListViewComponent implements OnInit {
     this.applyFilters();
   }
 
-  // Upewniamy się, że _id zawsze jest string
   editList(id?: string): void {
     if (id) {
       this.router.navigate(['/edit-list', id]);
@@ -98,10 +79,13 @@ export class ListViewComponent implements OnInit {
   }
 
   deleteList(id?: string): void {
-    if (id && confirm('Czy na pewno chcesz usunąć tę listę zakupów?')) {
-      this.shoppingListService.deleteList(id).subscribe(() => {
-        this.loadLists();
-      });
+    if (id) {
+      const confirmDelete = confirm('Czy na pewno chcesz usunąć tę listę zakupów?');
+      if (confirmDelete) {
+        this.shoppingListService.deleteList(id).subscribe(() => {
+          this.loadLists();
+        });
+      }
     }
   }
 

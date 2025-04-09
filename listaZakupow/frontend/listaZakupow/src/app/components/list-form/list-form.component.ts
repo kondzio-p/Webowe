@@ -2,14 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-import { ShoppingList, ShoppingListService } from '../../services/shopping-list.service';
+import { ShoppingListService } from '../../services/shopping-list.service';
 
 @Component({
   selector: 'app-list-form',
@@ -17,14 +10,7 @@ import { ShoppingList, ShoppingListService } from '../../services/shopping-list.
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatCheckboxModule,
-    MatIconModule
+    FormsModule
   ],
   templateUrl: './list-form.component.html',
   styleUrls: ['./list-form.component.css']
@@ -32,7 +18,7 @@ import { ShoppingList, ShoppingListService } from '../../services/shopping-list.
 export class ListFormComponent implements OnInit {
   listForm: FormGroup;
   editMode = false;
-  listId: string = ''; // Initialize with empty string
+  listId: string = '';
   newItemName = '';
 
   constructor(
@@ -44,7 +30,7 @@ export class ListFormComponent implements OnInit {
     this.listForm = this.fb.group({
       name: ['', Validators.required],
       store: ['', Validators.required],
-      date: [new Date(), Validators.required],
+      date: [this.formatDate(new Date()), Validators.required],
       items: this.fb.array([])
     });
   }
@@ -59,21 +45,38 @@ export class ListFormComponent implements OnInit {
     });
   }
 
+  // Helper do formatowania daty dla pola input[type="date"]
+  private formatDate(date: Date): string {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+
+    if (month.length < 2) 
+      month = '0' + month;
+    if (day.length < 2) 
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
   loadList(id: string): void {
     this.shoppingListService.getList(id).subscribe(list => {
       this.listForm.patchValue({
         name: list.name,
         store: list.store,
-        date: new Date(list.date)
+        date: this.formatDate(new Date(list.date))
       });
+
       // Resetuj items FormArray
       while (this.items.length) {
         this.items.removeAt(0);
       }
+
       // Dodaj każdy element do FormArray
       list.items.forEach(item => {
         this.items.push(this.fb.group({
-          _id: [item._id], // Fixed typo here (_id instead of *id)
+          _id: [item._id],
           name: [item.name, Validators.required],
           purchased: [item.purchased]
         }));
@@ -110,7 +113,7 @@ export class ListFormComponent implements OnInit {
   onSubmit(): void {
     if (this.listForm.valid) {
       const formData = this.listForm.value;
-     
+      
       if (this.editMode) {
         this.shoppingListService.updateList(this.listId, formData).subscribe(() => {
           this.router.navigate(['/']);

@@ -1,62 +1,79 @@
-<div class="form-container">
-    <h2>{{ editMode ? 'Edytuj listę zakupów' : 'Dodaj nową listę zakupów' }}</h2>
-   
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h2 class="h4 mb-0">{{ editMode ? 'Edytuj listę zakupów' : 'Dodaj nową listę zakupów' }}</h2>
+  </div>
+  
+  <div class="card-body">
     <form [formGroup]="listForm" (ngSubmit)="onSubmit()">
-      <div class="form-row">
-        <mat-form-field appearance="fill">
-          <mat-label>Nazwa listy</mat-label>
-          <input matInput formControlName="name" required>
-          <mat-error *ngIf="listForm.get('name')?.invalid">Nazwa jest wymagana</mat-error>
-        </mat-form-field>
-      </div>
-     
-      <div class="form-row">
-        <mat-form-field appearance="fill">
-          <mat-label>Sklep</mat-label>
-          <input matInput formControlName="store" required>
-          <mat-error *ngIf="listForm.get('store')?.invalid">Sklep jest wymagany</mat-error>
-        </mat-form-field>
-      </div>
-     
-      <div class="form-row">
-        <mat-form-field appearance="fill">
-          <mat-label>Data zakupów</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date" required>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="listForm.get('date')?.invalid">Data jest wymagana</mat-error>
-        </mat-form-field>
-      </div>
-     
-      <h3>Produkty</h3>
-     
-      <div class="add-item-container">
-        <mat-form-field appearance="fill" class="item-input">
-          <mat-label>Nowy produkt</mat-label>
-          <input matInput [(ngModel)]="newItemName" [ngModelOptions]="{standalone: true}">
-        </mat-form-field>
-        <button type="button" mat-raised-button color="primary" (click)="addItem()">Dodaj produkt</button>
-      </div>
-     
-      <div formArrayName="items" class="items-list">
-        <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
-          <mat-checkbox formControlName="purchased" (click)="togglePurchased(i)"></mat-checkbox>
-          <span [class.purchased]="item.get('purchased')?.value">{{ item.get('name')?.value }}</span>
-          <button type="button" mat-icon-button color="warn" (click)="removeItem(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-       
-        <div *ngIf="items.length === 0" class="empty-items">
-          Brak produktów na liście. Dodaj nowy produkt powyżej.
+      <div class="mb-3">
+        <label for="name" class="form-label">Nazwa listy</label>
+        <input type="text" class="form-control" id="name" formControlName="name" required>
+        <div *ngIf="listForm.get('name')?.invalid && listForm.get('name')?.touched" class="text-danger small mt-1">
+          Nazwa jest wymagana
         </div>
       </div>
-     
-      <div class="form-actions">
-        <button type="submit" mat-raised-button color="primary" [disabled]="listForm.invalid">
+      
+      <div class="mb-3">
+        <label for="store" class="form-label">Sklep</label>
+        <input type="text" class="form-control" id="store" formControlName="store" required>
+        <div *ngIf="listForm.get('store')?.invalid && listForm.get('store')?.touched" class="text-danger small mt-1">
+          Sklep jest wymagany
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="date" class="form-label">Data zakupów</label>
+        <input type="date" class="form-control" id="date" formControlName="date" required>
+        <div *ngIf="listForm.get('date')?.invalid && listForm.get('date')?.touched" class="text-danger small mt-1">
+          Data jest wymagana
+        </div>
+      </div>
+      
+      <h3 class="h5 mt-4 mb-3">Produkty</h3>
+      
+      <div class="input-group mb-4">
+        <input type="text" class="form-control" placeholder="Nowy produkt" [(ngModel)]="newItemName" [ngModelOptions]="{standalone: true}">
+        <button type="button" class="btn btn-primary" (click)="addItem()">
+          <i class="bi bi-plus-lg me-1"></i> Dodaj
+        </button>
+      </div>
+      
+      <div formArrayName="items" class="mb-4">
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let item of items.controls; let i = index" [formGroupName]="i" 
+                class="list-group-item d-flex justify-content-between align-items-center">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [id]="'edit-item-' + i" 
+                       formControlName="purchased" (click)="togglePurchased(i)">
+                <label class="form-check-label" [for]="'edit-item-' + i"
+                       [class.text-decoration-line-through]="item.get('purchased')?.value"
+                       [class.text-muted]="item.get('purchased')?.value">
+                  {{ item.get('name')?.value }}
+                </label>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeItem(i)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </li>
+            
+            <li *ngIf="items.length === 0" class="list-group-item text-center py-4 text-muted">
+              <i class="bi bi-cart3 fs-3 d-block mb-2"></i>
+              Brak produktów na liście. Dodaj nowy produkt powyżej.
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary" [disabled]="listForm.invalid">
+          <i class="bi" [ngClass]="editMode ? 'bi-save' : 'bi-plus-lg'"></i>
           {{ editMode ? 'Zapisz zmiany' : 'Dodaj listę' }}
         </button>
-        <button type="button" mat-button (click)="cancel()">Anuluj</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+          <i class="bi bi-x-lg me-1"></i>Anuluj
+        </button>
       </div>
     </form>
   </div>
+</div>

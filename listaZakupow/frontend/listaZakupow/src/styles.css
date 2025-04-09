@@ -1,20 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+/* Główne style aplikacji */
+html, body { 
+  height: 100%; 
+}
 
-html, body { height: 100%; }
 body { 
   margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
-  background-color: #f5f5f5;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f7fa;
 }
 
-/* Globalne style dla aplikacji */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+/* Kolory główne */
+:root {
+  --primary: #3949ab;
+  --primary-light: #6f74dd;
+  --primary-dark: #00227b;
+  --accent: #ff4081;
 }
 
-.mat-card {
-  margin-bottom: 20px;
+/* Dodatkowe style dla Bootstrapa */
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+/* Animacje */
+.card, .btn {
+  transition: all 0.3s ease;
+}
+
+/* Pomocnicze klase */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Stylizacja formularzy */
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 0.25rem rgba(57, 73, 171, 0.25);
+}
+
+/* Karty produktów */
+.card {
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }

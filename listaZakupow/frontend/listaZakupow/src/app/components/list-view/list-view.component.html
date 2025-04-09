@@ -1,63 +1,89 @@
-<div class="filter-container">
-    <mat-form-field>
-      <mat-label>Filtruj według sklepu</mat-label>
-      <mat-select [(ngModel)]="storeFilter" (selectionChange)="applyFilters()">
-        <mat-option value="">Wszystkie sklepy</mat-option>
-        <mat-option *ngFor="let store of stores" [value]="store">{{ store }}</mat-option>
-      </mat-select>
-    </mat-form-field>
- 
-    <mat-form-field>
-      <mat-label>Sortuj według</mat-label>
-      <mat-select [(ngModel)]="sortBy" (selectionChange)="applyFilters()">
-        <mat-option value="date">Data</mat-option>
-        <mat-option value="store">Sklep</mat-option>
-      </mat-select>
-    </mat-form-field>
- 
-    <button mat-button (click)="toggleSortDirection()">
-      {{ sortDirection === 'asc' ? '↑' : '↓' }}
-    </button>
-  </div>
- 
-  <div class="add-button-container">
-    <button mat-raised-button color="primary" (click)="addNewList()">Dodaj nową listę zakupów</button>
-  </div>
- 
-  <div class="lists-container">
-    <mat-card *ngFor="let list of filteredLists" class="list-card">
-      <mat-card-header>
-        <mat-card-title>{{ list.name }}</mat-card-title>
-        <mat-card-subtitle>
-          Sklep: {{ list.store }} | Data: {{ list.date | date:'dd.MM.yyyy' }}
-        </mat-card-subtitle>
-      </mat-card-header>
-     
-      <mat-card-content>
-        <mat-list>
-          <mat-list-item *ngFor="let item of list.items" class="item-row">
-            <div class="item-container">
-              <mat-checkbox
-                [checked]="item.purchased"
-                (change)="toggleItemStatus(list._id, item._id, item.purchased)"
-              >
-                <span [class.purchased]="item.purchased">{{ item.name }}</span>
-              </mat-checkbox>
-              <button mat-icon-button color="warn" (click)="deleteItem(list._id, item._id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-     
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="editList(list._id)">Edytuj</button>
-        <button mat-button color="warn" (click)="deleteList(list._id)">Usuń</button>
-      </mat-card-actions>
-    </mat-card>
-   
-    <div *ngIf="filteredLists.length === 0" class="empty-message">
-      Brak list zakupów do wyświetlenia.
+<div class="row mb-4">
+  <div class="col-12 col-md-4 mb-3 mb-md-0">
+    <div class="form-floating">
+      <select class="form-select" id="storeFilter" [(ngModel)]="storeFilter" (change)="applyFilters()">
+        <option value="">Wszystkie sklepy</option>
+        <option *ngFor="let store of stores" [value]="store">{{ store }}</option>
+      </select>
+      <label for="storeFilter">Filtruj według sklepu</label>
     </div>
   </div>
+  
+  <div class="col-12 col-md-4 mb-3 mb-md-0">
+    <div class="form-floating">
+      <select class="form-select" id="sortBy" [(ngModel)]="sortBy" (change)="applyFilters()">
+        <option value="date">Data</option>
+        <option value="store">Sklep</option>
+      </select>
+      <label for="sortBy">Sortuj według</label>
+    </div>
+  </div>
+  
+  <div class="col-12 col-md-4 d-flex align-items-center">
+    <button class="btn btn-outline-primary ms-md-2" (click)="toggleSortDirection()">
+      <i class="bi" [ngClass]="sortDirection === 'asc' ? 'bi-sort-up' : 'bi-sort-down'"></i>
+      {{ sortDirection === 'asc' ? 'Rosnąco' : 'Malejąco' }}
+    </button>
+  </div>
+</div>
+
+<div class="mb-4">
+  <button class="btn btn-primary" (click)="addNewList()">
+    <i class="bi bi-plus-circle me-2"></i>Dodaj nową listę zakupów
+  </button>
+</div>
+
+<div class="row">
+  <div *ngFor="let list of filteredLists" class="col-12 col-md-6 col-lg-4 mb-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0">{{ list.name }}</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <span class="badge bg-light text-dark">
+            <i class="bi bi-shop me-1"></i>{{ list.store }}
+          </span>
+          <span class="badge bg-light text-dark">
+            <i class="bi bi-calendar3 me-1"></i>{{ list.date | date:'dd.MM.yyyy' }}
+          </span>
+        </div>
+        
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let item of list.items" class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [id]="'item-' + item._id" 
+                     [checked]="item.purchased" 
+                     (change)="toggleItemStatus(list._id, item._id, item.purchased)">
+              <label class="form-check-label" [class.text-decoration-line-through]="item.purchased" 
+                     [class.text-muted]="item.purchased" [for]="'item-' + item._id">
+                {{ item.name }}
+              </label>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteItem(list._id, item._id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </li>
+          <li *ngIf="list.items.length === 0" class="list-group-item text-center text-muted">
+            Brak produktów na liście
+          </li>
+        </ul>
+      </div>
+      <div class="card-footer bg-white d-flex justify-content-between">
+        <button class="btn btn-outline-primary" (click)="editList(list._id)">
+          <i class="bi bi-pencil me-1"></i>Edytuj
+        </button>
+        <button class="btn btn-outline-danger" (click)="deleteList(list._id)">
+          <i class="bi bi-trash me-1"></i>Usuń
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="filteredLists.length === 0" class="col-12">
+    <div class="alert alert-info text-center p-5">
+      <i class="bi bi-info-circle fs-1 d-block mb-3"></i>
+      <p class="mb-0">Brak list zakupów do wyświetlenia.</p>
+    </div>
+  </div>
+</div>

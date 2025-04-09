@@ -1,59 +1,32 @@
-.form-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .form-row {
-    margin-bottom: 20px;
-  }
-  
-  mat-form-field {
-    width: 100%;
-  }
-  
-  .add-item-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .item-input {
-    flex-grow: 1;
-    margin-right: 10px;
-  }
-  
-  .items-list {
-    margin-bottom: 20px;
-  }
-  
-  .item-row {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .item-row span {
-    margin: 0 10px;
-    flex-grow: 1;
-  }
-  
-  .purchased {
-    text-decoration: line-through;
-    color: #888;
-  }
-  
-  .empty-items {
-    padding: 20px;
-    text-align: center;
-    color: #888;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-  }
-  
-  .form-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-  }
+.card {
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #3949ab;
+}
+
+.form-check-label {
+  transition: all 0.2s;
+}
+
+.form-check-input:checked {
+  background-color: #3949ab;
+  border-color: #3949ab;
+}
+
+.btn-outline-danger:hover {
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.list-group-item {
+  transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}

@@ -1,44 +1,39 @@
-.filter-container {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-    align-items: center;
-  }
-  
-  .add-button-container {
-    margin-bottom: 20px;
-  }
-  
-  .lists-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  
-  .list-card {
-    margin-bottom: 20px;
-  }
-  
-  .item-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .purchased {
-    text-decoration: line-through;
-    color: #888;
-  }
-  
-  .item-row {
-    height: auto !important;
-    margin-bottom: 8px;
-  }
-  
-  .empty-message {
-    text-align: center;
-    margin-top: 30px;
-    color: #888;
-    grid-column: 1 / -1;
-  }
+.card {
+  transition: transform 0.2s;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+  border-bottom: none;
+}
+
+.list-group-item {
+  border-left: none;
+  border-right: none;
+}
+
+.badge {
+  font-weight: normal;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.btn-outline-danger:hover {
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.form-check-label {
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #3949ab;
+  border-color: #3949ab;
+}

@@ -1,0 +1,15 @@
+<div class="container mt-4">
+  <h2 class="mb-3">Wczytaj plik JSON z danymi obrazów</h2>
+  <input type="file" (change)="onFileSelected($event)" accept=".json" class="form-control mb-4">
+  
+  <button class="btn btn-primary mb-4" (click)="saveImagePaths()">Zapisz ścieżki do plików</button>
+
+  <div *ngFor="let img of images" class="row align-items-center mb-4 border rounded shadow-sm p-3 bg-light">
+    <div class="col-md-4">
+      <img [src]="'assets/images/' + img.name" class="img-fluid rounded" [alt]="img.title">
+    </div>
+    <div class="col-md-8">
+      <h4>{{ img.title }}</h4>
+    </div>
+  </div>
+</div>
